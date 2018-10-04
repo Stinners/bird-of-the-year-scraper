@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 
-from scraper import outfile
-
 # Read the data from the csv file
 def get_data(filename):
     times = []
@@ -38,6 +36,4 @@ def plot(filename, num):
     times, data = get_data(filename)
     top_birds = get_top(data, num)
     make_plot(top_birds)
-
-plot(outfile, 5)
 

@@ -3,9 +3,6 @@ import urllib.request
 import os 
 import datetime
 
-url = "http://birdoftheyear.org.nz/"
-outfile = "bird_votes.csv"
-
 # Returns a tuple in the form (name, votes)
 def process_bird(bird_node):
     name = bird_node.find("h3").text 
@@ -39,7 +36,7 @@ def write_to_csv(bird_data, filename):
         votes = [timestamp] + votes
         write_series(votes, f)
 
-def fetch_data():
+def fetch_data(url):
     html = urllib.request.urlopen(url).read()
     soup = bs4.BeautifulSoup(html, 'html.parser')
 
@@ -49,8 +46,8 @@ def fetch_data():
     
     return [process_bird(bird) for bird in bird_nodes]
 
-def do_scrape(filename):
-    data = fetch_data()
+def do_scrape(url, filename):
+    data = fetch_data(url)
     write_to_csv(data, filename)
     return(data)
 
