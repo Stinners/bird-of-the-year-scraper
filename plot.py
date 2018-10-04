@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+from datetime import datetime
+
+from config import outfile, date_format
 
 # Read the data from the csv file
 def get_data(filename):
@@ -18,22 +21,35 @@ def get_data(filename):
 
     return times, birds
 
+# Calculates the difference between two times in hours 
+# Times should be in YYYY-MM-DD HH-MM format
+def time_diff(start, stop):
+    start = datetime.strptime(start, date_format)
+    stop = datetime.strptime(stop, date_format)
+    diff = stop - start
+    # This will cause problems if the difference is greater than a day
+    hours = diff.seconds / 60 / 61
+    return hours
+
 def get_top(data, num):
     # Sort the birds by their most recent vote
     data.sort(key=lambda bird: bird[-1], reverse=True)
     return data[:num]
 
-def make_plot(birds):
+def make_plot(birds, times):
     names = [bird[0] for bird in birds]
     votes = [bird[1:] for bird in birds]
-    xs = range(len(votes[0]))
+    time_diffs = [time_diff(times[0], time) for time in times]
+    print(time_diffs)
     for name, bird_votes in zip(names, votes):
-        plt.plot(xs, bird_votes, label=name)
+        plt.plot(time_diffs, bird_votes, label=name)
     plt.legend(loc="best")
     plt.show()
 
 def plot(filename, num):
     times, data = get_data(filename)
     top_birds = get_top(data, num)
-    make_plot(top_birds)
+    make_plot(top_birds, times)
 
+if __name__ == "__main__":
+    plot(outfile, 10)

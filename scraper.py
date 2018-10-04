@@ -3,6 +3,8 @@ import urllib.request
 import os 
 import datetime
 
+from config import date_format
+
 # Returns a tuple in the form (name, votes)
 def process_bird(bird_node):
     name = bird_node.find("h3").text 
@@ -31,7 +33,7 @@ def write_to_csv(bird_data, filename):
     #Write the voting data
     with open(filename, "a") as f:
         # Get current time in format YYYY-MM-DD HH-MM
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        timestamp = datetime.datetime.now().strftime(date_format)
         votes = [bird[1] for bird in bird_data]
         votes = [timestamp] + votes
         write_series(votes, f)
@@ -50,6 +52,3 @@ def do_scrape(url, filename):
     data = fetch_data(url)
     write_to_csv(data, filename)
     return(data)
-
-if __name__ == "__main__":
-    do_scrape(outfile)
