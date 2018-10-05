@@ -29,6 +29,7 @@ def time_diff(start, stop):
     diff = stop - start
     # This will cause problems if the difference is greater than a day
     hours = diff.seconds / 60 / 61
+    hours += diff.days * 24
     return hours
 
 def get_top(data, num):
